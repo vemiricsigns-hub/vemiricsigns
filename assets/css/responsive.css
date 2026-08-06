@@ -1,0 +1,41 @@
+/* VEMIRIC SIGNS RESPONSIVE OVERRIDES */
+@media (max-width: 991px) {
+    .hero__slides { min-height: 55vh; }
+    .hero__title { font-size: clamp(2.3rem, 6vw, 3.5rem); }
+    .hero__text { font-size: 1rem; }
+    .hero__arrows { right: 1rem; left: auto; }
+    .hero__pager { bottom: 1rem; }
+    .split-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .testimonial-track { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 767px) {
+    .container { width: min(100% - 1.5rem, 100%); }
+    .header-inner { padding: 0.9rem 0; }
+    .topbar { display: none; }
+    .site-nav { width: 100%; }
+    .nav-list { display: none; }
+    .nav-link--button { display: none; }
+    .hero__slides { min-height: 46vh; }
+    .hero__content { padding: 0 1rem; }
+    .hero__actions { flex-direction: column; }
+    .hero__arrows { bottom: auto; top: auto; left: 1rem; right: 1rem; }
+    .card-grid { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr; }
+    .process-grid { grid-template-columns: 1fr; }
+    .testimonial-track { grid-template-columns: 1fr; }
+    .floating-contact { right: 1rem; bottom: 5.5rem; }
+    .floating-contact a { width: 48px; height: 48px; }
+    .bottom-bar { display: flex; }
+}
+
+@media (max-width: 576px) {
+    .hero__slides { min-height: 42vh; }
+    .hero__title { font-size: clamp(2rem, 8vw, 2.6rem); }
+    .hero__text { font-size: 0.98rem; }
+    .form-grid { gap: 0.85rem; }
+    .form-group { gap: 0.4rem; }
+    .quote-section { padding: 1.5rem; }
+    .footer-inner { padding: 0 1rem; }
+}
