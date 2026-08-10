@@ -13,10 +13,23 @@
 @media (max-width: 767px) {
     .container { width: min(100% - 1.5rem, 100%); }
     .header-inner { padding: 0.9rem 0; }
-    .topbar { display: none; }
-    .site-nav { width: 100%; }
+    .topbar {
+        flex-wrap: wrap;
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+    }
+    .topbar__group:first-child {
+        display: none;
+    }
+    .topbar__group:last-child {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 0.75rem;
+    }
+    .site-nav { width: 100%; gap: 0.75rem; align-items: center; }
     .nav-list { display: none; }
     .nav-link--button { display: none; }
+    .mobile-cta { display: inline-flex !important; }
     .hero__slides { min-height: 46vh; }
     .hero__content { padding: 0 1rem; }
     .hero__actions { flex-direction: column; }
