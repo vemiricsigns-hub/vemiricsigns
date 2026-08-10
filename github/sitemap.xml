@@ -3,9 +3,9 @@
   <url><loc>https://example.com/</loc></url>
   <url><loc>https://example.com/about/</loc></url>
   <url><loc>https://example.com/services/</loc></url>
-  <url><loc>https://example.com/signage/</loc></url>
-  <url><loc>https://example.com/digital-printing/</loc></url>
-  <url><loc>https://example.com/branding/</loc></url>
+  <url><loc>https://example.com/services/signage/</loc></url>
+  <url><loc>https://example.com/services/digital-printing/</loc></url>
+  <url><loc>https://example.com/services/branding/</loc></url>
   <url><loc>https://example.com/contact/</loc></url>
   <url><loc>https://example.com/privacy-policy/</loc></url>
   <url><loc>https://example.com/terms/</loc></url>
