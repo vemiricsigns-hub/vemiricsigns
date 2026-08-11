@@ -858,16 +858,27 @@ button:focus-visible {
     gap: 1.5rem;
 }
 
+.footer-column {
+    display: grid;
+    gap: 0.75rem;
+}
+
 .footer-column h3 {
-    margin: 0 0 1rem;
+    margin: 0;
     color: #fff;
     font-size: 1.1rem;
 }
 
+.footer-column a,
+.footer-column p {
+    display: block;
+    color: rgba(255,255,255,0.82);
+    margin: 0;
+    line-height: 1.8;
+}
+
 .footer-column a {
-    display: inline-flex;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 0.85rem;
+    text-decoration: none;
 }
 
 .footer-bottom {
@@ -878,8 +889,7 @@ button:focus-visible {
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 1rem;
-    color: rgba(255,255,255,0.7);
-    font-size: 0.95rem;
+    color: rgba(255,255,255,0.72);
 }
 
 .footer-social {
@@ -892,7 +902,7 @@ button:focus-visible {
     width: 38px;
     height: 38px;
     border-radius: 12px;
-    background: rgba(255,255,255,0.08);
+    background: rgba(31,41,55,0.08);
     align-items: center;
     justify-content: center;
 }

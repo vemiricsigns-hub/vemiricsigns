@@ -59,4 +59,15 @@
     .form-group { gap: 0.4rem; }
     .quote-section { padding: 1.5rem; }
     .footer-inner { padding: 0 1rem; }
+    .footer-inner,
+    .footer-bottom {
+        text-align: center;
+        justify-items: center;
+    }
+    .footer-column {
+        align-items: center;
+    }
+    .footer-bottom {
+        justify-content: center;
+    }
 }
