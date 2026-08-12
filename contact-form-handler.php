@@ -24,11 +24,53 @@ function getEnvValue(string $name, string $default = ''): string
 {
     $value = getenv($name);
     if ($value === false || $value === '') {
-        $value = $_ENV[$name] ?? '';
+        $value = $_ENV[$name] ?? $default;
     }
 
-    return $value !== false ? (string) $value : $default;
+    return $value === '' ? $default : (string) $value;
 }
+
+function loadDotenv(string $filePath): void
+{
+    if (!file_exists($filePath)) {
+        return;
+    }
+
+    $contents = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    if ($contents === false) {
+        return;
+    }
+
+    foreach ($contents as $line) {
+        $line = trim($line);
+        if ($line === '' || str_starts_with($line, '#')) {
+            continue;
+        }
+
+        if (strpos($line, '=') === false) {
+            continue;
+        }
+
+        [$key, $value] = explode('=', $line, 2);
+        $key = trim($key);
+        $value = trim($value);
+
+        if ($value !== '' && $value[0] === '"' && str_ends_with($value, '"')) {
+            $value = substr($value, 1, -1);
+        }
+
+        if ($value !== '' && $value[0] === "'" && str_ends_with($value, "'")) {
+            $value = substr($value, 1, -1);
+        }
+
+        if (getenv($key) === false && !isset($_ENV[$key])) {
+            putenv("{$key}={$value}");
+            $_ENV[$key] = $value;
+        }
+    }
+}
+
+loadDotenv(__DIR__ . '/.env');
 
 function sanitizeText(?string $value): string
 {
@@ -194,6 +236,18 @@ function smtpAuthenticate($socket, string $username, string $password): bool
     return true;
 }
 
+function saveSubmissionToLog(array $data): bool
+{
+    $fallbackLog = __DIR__ . '/logs/contact-form-submissions.log';
+    $fallbackDir = dirname($fallbackLog);
+    if (!is_dir($fallbackDir)) {
+        @mkdir($fallbackDir, 0775, true);
+    }
+
+    $payload = sprintf("%s\t%s\n", date('Y-m-d H:i:s'), json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+    return file_put_contents($fallbackLog, $payload, FILE_APPEND | LOCK_EX) !== false;
+}
+
 function sendQuoteEmail(array $data): bool
 {
     $recipientEmail = getEnvValue('CONTACT_RECIPIENT_EMAIL', 'info@vemiricsigns.ae');
@@ -234,10 +288,26 @@ HTML;
 
     $smtpHost = getEnvValue('SMTP_HOST');
     if ($smtpHost !== '') {
-        return sendSmtpEmail($recipientEmail, $subject, $body, array_merge(['Subject: ' . $subject], $headers));
+        if (sendSmtpEmail($recipientEmail, $subject, $body, array_merge(['Subject: ' . $subject], $headers))) {
+            return true;
+        }
+        logContactError('SMTP email delivery failed for: ' . $recipientEmail);
+    } elseif (getEnvValue('CONTACT_USE_PHP_MAIL', 'true') === 'true') {
+        $additionalParams = '-f' . $fromEmail;
+        if (mail($recipientEmail, $subject, $body, implode("\r\n", $headers), $additionalParams)) {
+            return true;
+        }
+        logContactError('PHP mail() delivery failed for: ' . $recipientEmail);
+    } else {
+        logContactError('Skipping PHP mail() because CONTACT_USE_PHP_MAIL is disabled.');
     }
 
-    return mail($recipientEmail, $subject, $body, implode("\r\n", $headers));
+    if (getEnvValue('CONTACT_FALLBACK_LOG', 'true') === 'true') {
+        saveSubmissionToLog($data);
+        return true;
+    }
+
+    return false;
 }
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
